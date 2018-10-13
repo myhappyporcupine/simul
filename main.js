@@ -1,5 +1,7 @@
-const birthRate = 0.8;
-const deathRate = 0.2;
+const frameRate = 10;
+const deathRate =  0.05;
+const birthRate =  0.6;
+const moveRate  =  0.8;
 
 class Creature {
 	constructor(x, y, color) {
@@ -20,9 +22,7 @@ class World {
 	constructor(width, height) {
 		this.width = width;
 		this.height = height;
-		this.creatures = [
-			new Creature(randInt(this.width), randInt(this.height), randColor())
-		];
+		this.creatures = [];
 	}
 	kill() {
 		for (let i = this.creatures.length - 1; i >= 0; i--) {
@@ -38,7 +38,7 @@ class World {
 	}
 	move() {
 		for (let creature of this.creatures) {
-			if (Math.random() < 0.5) {
+			if (Math.random() < moveRate) {
 				let direction = randInt(4);
 				switch (direction) {
 					case 0:
@@ -74,8 +74,8 @@ class World {
 			let tr = document.createElement("tr");
 			for (let x = 0; x < this.width; x++) {
 				let td = document.createElement("td");
-				td.style.width = "20px";
-				td.style.height = "20px";
+				td.style.width = "10px";
+				td.style.height = "10px";
 				for (let creature of this.creatures)
 					if (x == creature.x && y == creature.y)
 						td.style.backgroundColor = creature.color;
@@ -100,10 +100,10 @@ function randColor() {
 }
 
 let world, table;
-world = new World(12, 8);
+world = new World(24, 16);
 document.body.appendChild(table = world.dom());
 setInterval(() => {
 	world.run();
 	table.remove();
 	document.body.appendChild(table = world.dom());
-}, 100);
+}, 1000 / frameRate);
